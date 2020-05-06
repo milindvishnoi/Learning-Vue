@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vue</title>
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <p> {{ title }} </p> 
+            <a v-bind:href="link">Google</a> 
+            <p></p>
+        </div>          
+        <script>
+                new Vue({
+                    el: '#app',
+                    data: {
+                        title: "Hello World!",
+                        link: "http://www.google.com",
+                        finishedLink : "<a href='http://www.google.com'>Google</a>"
+                    },
+                    methods: {
+                        changeTitle : function(event){
+                            this.title = event.target.value;
+                        },
+                        returnText : function() {
+                            return this.title;
+                        }
+                    }
+                });
+        </script>
+
+    <div id="exercise">
+        <!-- 1) Fill the <p> below with your Name and Age - using Interpolation -->
+        <p>VueJS is pretty cool - {{ name }}, {{ age }}</p> 
+        <!-- 2) Output your age, multiplied by 3 -->
+        <p> {{ age * 3 }} </p> 
+        <!-- 3) Call a function to output a random float between 0 and 1 (Math.random()) -->
+        <p v-once> {{ getRandom() }} </p> 
+        <!-- 4) Search any image on Google and output it here by binding the "src" attribute -->
+        <div>
+            <img style="width: 100px; height: 100px;" v-bind:src="pic">
+        </div> 
+         <!-- 5) Pre-Populate this input with your name (set the "value" attribute) -->
+        <div>
+            <input type="text" v-bind:value="name" v-on:input="changeName">
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: "#exercise",
+            data: {
+                name : "Milind Vishnoi",
+                age : 20,
+                pic : "pic.png"
+            },
+            methods: {
+                thriceAge : function(){
+                    return parseInt(this.age)*3;
+                },
+                getRandom : function() {
+                    return Math.random();
+                },
+                changeName : function(event) {
+                    this.name = event.target.value;
+                }
+            }
+        })
+    </script>
+
+    <div id="clickdiv">
+        <button v-on:click="increase(2, $event)">Click Me!</button>
+        <p> {{ counter }} </p>
+        <p v-on:mousemove="updateCoordinates">
+             ({{ x }} , {{ y }}) 
+            <span v-on:mousemove.stop="">Dead Spot</span>
+        </p>
+    </div>
+    <script>
+        new Vue({
+            el : "#clickdiv",
+            data : {
+                counter: 0,
+                x: 0,
+                y: 0
+            },
+            methods : {
+                increase : function(step, event) {
+                    this.counter += step;
+                },
+                updateCoordinates : function(event) {
+                    this.x = event.clientX;
+                    this.y = event.clientY;
+                }
+            }
+
+        });
+    </script>
+
+    </body>
+</html>

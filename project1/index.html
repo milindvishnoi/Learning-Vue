@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monster Slayer</title>
+    <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="css/foundation.min.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+    <div id="app">
+        <section class="row">
+            <div class="small-6 columns">
+                <h1 class="text-center">YOU</h1>
+                <div class="healthbar">
+                    <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;" :style="{width: getYourHealth}">
+                        {{ yourHealth }}
+                    </div>
+                </div>
+            </div>
+            <div class="small-6 columns">
+                <h1 class="text-center">MONSTER</h1>
+                <div class="healthbar">
+                    <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;" :style="{width: getMonsterHealth}">
+                        {{ monsterHealth }}
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="row controls" v-if="!isStarted">
+            <div class="small-12 columns">
+                <button id="start-game" @click="isStarted = !isStarted">START NEW GAME</button>
+            </div>
+        </section>
+        <section class="row controls" v-if="isStarted">
+            <div class="small-12 columns">
+                <button id="attack" @click="attack()">ATTACK</button>
+                <button id="special-attack" @click="specialAttack()">SPECIAL ATTACK</button>
+                <button id="heal" @click="heal()">HEAL</button>
+                <button id="give-up" @click="yourHealth = 0">GIVE UP</button>
+            </div>
+        </section>
+        <section class="row log">
+            <div class="small-12 columns">
+                <ul>
+                    <template v-for="(attack, index) in attackList">
+                        <li v-if="attack['player']=='player' && attack['power']" :class="playerCss">
+                            Player hit Monster for {{ attack["power"] }}
+                        </li>
+                        <li v-else-if="attack['player']=='player' && attack['heal']" :class="playerCss"> Player heals for {{ attack["heal"] }} </li>
+                        <li v-else :class="monsterCss"> Monster hit Player for {{ attack["damage"] }} </li>
+                    </template>
+                </ul>
+            </div>
+        </section>
+    </div>
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                isStarted: false,
+                yourHealth: 100,
+                monsterHealth: 100,
+                attackList: [],
+                monsterCss: "log ul monster-turn",
+                playerCss: "log ul player-turn"
+            },
+            computed: {
+                getYourHealth: function(){
+                    if(this.yourHealth > 0)
+                        return this.yourHealth + "%";
+                    this.winOrLoseCondition();
+                    return "100%";
+                },
+                getMonsterHealth: function(){
+                    if(this.monsterHealth > 0)
+                        return this.monsterHealth + "%";
+                    this.winOrLoseCondition();
+                    return "100%"
+                }
+            },
+            methods: {
+                winOrLoseCondition: function(){
+                    this.isStarted = false;
+                    if(this.monsterHealth <= 0 && this.yourHealth <= 0)
+                        alert("You Tie");
+                    else if(this.monsterHealth > 0)
+                        alert("You Lose!");
+                    else
+                        alert("You Win!");
+                    this.yourHealth = 100;
+                    this.monsterHealth = 100;
+                },
+                monsterAttack : function(){
+                    damage = Math.floor(Math.random() * 10) + 1;
+                    return damage;
+                },
+                attack: function(){
+                    power = Math.floor(Math.random() * 10) + 1;
+                    this.attackList.push({"player": "player", "power": power});
+                    damage = this.monsterAttack();
+                    this.attackList.push({"player": "monster", "damage": damage});
+                    this.yourHealth -= damage;
+                    this.monsterHealth -= power;
+                },
+                specialAttack: function(){
+                    power = Math.floor(Math.random() * 10) + 11;
+                    this.attackList.push({"player": "player", "power": power});
+                    damage = this.monsterAttack();
+                    this.attackList.push({"player": "monster", "damage": damage});
+                    console.log(this.attackList);
+                    this.yourHealth -= damage;
+                    this.monsterHealth -= power;
+                },
+                heal: function(){
+                    heal = Math.floor(Math.random() * 10);
+                    this.attackList.push({"player": "player", "heal": power});
+                    damage = this.monsterAttack();
+                    this.attackList.push({"player": "monster", "damage": damage});
+                    this.yourHealth -= damage;
+                    this.yourHealth += power;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

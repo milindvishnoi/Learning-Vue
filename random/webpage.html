@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vue</title>
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <input typ="text" v-model="name">
+            <p> {{ name }} </p>
+        </div>
+        <div id="counter">
+            <button v-on:click="number++">Increase</button>
+            <button v-on:click="number--">Decrease</button>
+            <button v-on:click="number2++">Increase</button>
+            <p>Counter: {{ number }} </p>
+            <p>Result: {{ result() }} | {{ output }} </p>
+        </div>
+        <script>
+            new Vue({
+                el: "#app",
+                data: {
+                    name: "Milind"
+                }
+            });
+            new Vue({
+                el: "#counter",
+                data: {
+                    number: 0,
+                    number2: 0
+                },
+                computed: {
+                    output: function(){
+                        return this.number > 5 ? "Greater 5" : "Smaller than or equal to 5";
+                    }
+                },
+                watch: {
+                    number: function(value){
+                        var vm = this;
+                        setTimeOut(function() {
+                            vm.number = 0;
+                        }, 2000)
+                    }
+                },
+                methods: {
+                    result : function() {
+                        return this.number > 5 ? "Greater 5" : "Smaller than or equal to 5";
+                    }
+                }
+            }); 
+        </script>
+    </body>
+</html>

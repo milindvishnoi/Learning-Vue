@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vue</title>
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <!-- <p v-if="show">You can see me</p>
+            <p v-else>Now you see me</p>
+            <template>
+                <p>Inside template</p>
+            </template>
+            <p>Do you also see me?</p>
+            <button @click="show = !show">Switch</button> -->
+            <ul>
+                <li v-for="(todo, index) in todos"> {{ todo }} [{{ index }}]</li>
+            </ul>
+            <button @click="show = !show"> {{ showMyDataButton }} </button>
+            <ul v-show="show">
+                <li v-for="(value, key) in person"> {{ key }} : {{ value }} </li>
+            </ul>
+        </div>
+        <script>
+            new Vue({
+                el:  "#app",
+                data: {
+                    show: true,
+                    todos: ["VueJS", "MAT224", "CSC209"],
+                    person: {name: "Milind", age: 20, favColor: "red"}
+                },
+                computed: {
+                    showMyDataButton: function(){
+                        var vm = this;
+                        if(vm.show == true){
+                            return "Hide My Data"
+                        }else{
+                            return "Show My Data"
+                        }
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
